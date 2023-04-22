@@ -1,1 +1,4 @@
-.idea/
+.idea
+*.tfvars
+.terraform
+terraform.tfstate*
