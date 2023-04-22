@@ -2,5 +2,6 @@
 # プロバイダ設定
 # ---------------------------
 provider "aws" {
-  region = "ap-northeast-1"
+  region      = "ap-northeast-1"
+  max_retries = 20
 }
