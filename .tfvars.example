@@ -1,1 +1,3 @@
-my_ip =
+allow_ip_list=[]
+environment=
+app_name=
