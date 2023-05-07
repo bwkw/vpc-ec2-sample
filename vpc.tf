@@ -5,7 +5,7 @@ resource "aws_vpc" "vpc" {
   cidr_block = var.vpc_cidr
   #   enable_dns_hostnames = true
   tags = {
-    Name = "terraform-vpc"
+    Name = "${var.environment}-${var.app_name}-vpc"
   }
 }
 
@@ -17,7 +17,7 @@ resource "aws_subnet" "pub_sub_1a" {
   cidr_block        = var.pub_sub_1a_cidr
   availability_zone = var.availability_zone_a
   tags = {
-    Name = "terraform-public-1a-sub"
+    Name = "${var.environment}-${var.app_name}-public-1a-sub"
   }
 }
 
@@ -27,7 +27,7 @@ resource "aws_subnet" "pub_sub_1a" {
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
   tags = {
-    Name = "terraform-igw"
+    Name = "${var.environment}-${var.app_name}-igw"
   }
 }
 
@@ -41,7 +41,7 @@ resource "aws_route_table" "public_rt" {
     gateway_id = aws_internet_gateway.igw.id
   }
   tags = {
-    Name = "terraform-public-rt"
+    Name = "${var.environment}-${var.app_name}-public-rt"
   }
 }
 
@@ -55,11 +55,11 @@ resource "aws_route_table_association" "public_rt_associate" {
 # Security Group
 # ---------------------------
 resource "aws_security_group" "ec2_sg" {
-  name        = "terraform-ec2-sg"
+  name        = "${var.environment}-${var.app_name}-ec2-sg"
   description = "For EC2"
   vpc_id      = aws_vpc.vpc.id
   tags = {
-    Name = "terraform-ec2-sg"
+    Name = "${var.environment}-${var.app_name}-ec2-sg"
   }
 
   # インバウンドルール
@@ -67,13 +67,13 @@ resource "aws_security_group" "ec2_sg" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = [var.my_ip]
+    cidr_blocks = var.allow_ip_list
   }
   ingress {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = [var.my_ip]
+    cidr_blocks = var.allow_ip_list
   }
 
   # アウトバウンドルール
