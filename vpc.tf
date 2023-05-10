@@ -16,7 +16,7 @@ resource "aws_subnet" "pub_sub_1a" {
   cidr_block        = local.pub_sub_1a_cidr
   availability_zone = local.availability_zone_a
   tags = {
-    Name = "${var.environment}-${var.app_name}-public-1a-sub"
+    Name = "${var.environment}-${var.app_name}-pub-1a-sub"
   }
 }
 
@@ -33,21 +33,21 @@ resource "aws_internet_gateway" "igw" {
 # ---------------------------
 # Route table
 # ---------------------------
-resource "aws_route_table" "public_rt" {
+resource "aws_route_table" "pub_rt" {
   vpc_id = aws_vpc.vpc.id
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.igw.id
   }
   tags = {
-    Name = "${var.environment}-${var.app_name}-public-rt"
+    Name = "${var.environment}-${var.app_name}-pub-rt"
   }
 }
 
 # SubnetとRoute tableの関連付け
-resource "aws_route_table_association" "public_rt_associate" {
+resource "aws_route_table_association" "pub_rt_associate" {
   subnet_id      = aws_subnet.pub_sub_1a.id
-  route_table_id = aws_route_table.public_rt.id
+  route_table_id = aws_route_table.pub_rt.id
 }
 
 # ---------------------------
