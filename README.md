@@ -13,7 +13,9 @@ cp .tfvars.example .tfvars
 2. Set secret variable in .tfvars
 
 ```
-my_ip = {{your_ip}}
+allow_ip_list=[]
+environment=
+app_name=
 ```
 
 3. Obtain AWS access_key and secret_key
