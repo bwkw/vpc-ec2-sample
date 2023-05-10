@@ -2,29 +2,11 @@
 # EC2
 # ---------------------------
 
-# Amazon Linux 2 の最新版AMIを取得
-data "aws_ami" "amazon_linux_2_arm64" {
-  most_recent = true
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-hvm-*-arm64-gp2"]
-  }
-  filter {
-    name   = "architecture"
-    values = ["arm64"]
-  }
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-  owners = ["amazon"]
-}
-
 # EC2作成
 resource "aws_instance" "ec2" {
   ami                         = data.aws_ami.amazon_linux_2_arm64.id
-  instance_type               = var.ec2_instance_type
-  availability_zone           = var.availability_zone_a
+  instance_type               = local.ec2_instance_type
+  availability_zone           = local.availability_zone_a
   vpc_security_group_ids      = [aws_security_group.ec2_sg.id]
   subnet_id                   = aws_subnet.pub_sub_1a.id
   associate_public_ip_address = "true"
@@ -51,8 +33,11 @@ data "aws_iam_policy_document" "assume_role" {
 }
 
 resource "aws_iam_role" "role" {
-  name               = "EC2Role"
+  name               = "${var.environment}-${var.app_name}-ec2-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  tags = {
+    Name = "${var.environment}-${var.app_name}-ec2-role"
+  }
 }
 
 data "aws_iam_policy" "systems_manager" {

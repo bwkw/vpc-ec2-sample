@@ -2,8 +2,7 @@
 # VPC
 # ---------------------------
 resource "aws_vpc" "vpc" {
-  cidr_block = var.vpc_cidr
-  #   enable_dns_hostnames = true
+  cidr_block = local.vpc_cidr
   tags = {
     Name = "${var.environment}-${var.app_name}-vpc"
   }
@@ -14,8 +13,8 @@ resource "aws_vpc" "vpc" {
 # ---------------------------
 resource "aws_subnet" "pub_sub_1a" {
   vpc_id            = aws_vpc.vpc.id
-  cidr_block        = var.pub_sub_1a_cidr
-  availability_zone = var.availability_zone_a
+  cidr_block        = local.pub_sub_1a_cidr
+  availability_zone = local.availability_zone_a
   tags = {
     Name = "${var.environment}-${var.app_name}-public-1a-sub"
   }
